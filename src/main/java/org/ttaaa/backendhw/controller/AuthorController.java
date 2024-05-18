@@ -2,8 +2,8 @@ package org.ttaaa.backendhw.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.ttaaa.backendhw.models.dto.AuthorDto;
-import org.ttaaa.backendhw.models.entity.Author;
+import org.ttaaa.backendhw.model.dto.AuthorDto;
+import org.ttaaa.backendhw.model.entity.Author;
 import org.ttaaa.backendhw.service.AuthorService;
 
 import java.util.List;

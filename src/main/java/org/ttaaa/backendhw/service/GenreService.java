@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.ttaaa.backendhw.dao.GenreDAO;
-import org.ttaaa.backendhw.exception.NotFoundException;
-import org.ttaaa.backendhw.models.dto.GenreDto;
-import org.ttaaa.backendhw.models.entity.Genre;
+import org.ttaaa.backendhw.repository.GenreRepository;
+import org.ttaaa.backendhw.model.dto.GenreDto;
+import org.ttaaa.backendhw.model.entity.Genre;
+import org.ttaaa.backendhw.service.dto.GenreDtoService;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,25 +16,26 @@ import java.util.UUID;
 @Transactional
 @AllArgsConstructor
 public class GenreService {
-    private GenreDAO genreDAO;
+    private GenreRepository genreRepository;
+    private GenreDtoService genreDtoService;
 
     public List<Genre> getAllGenres() {
-        return genreDAO.findAll();
+        return genreRepository.getAll();
     }
 
     public Genre getGenre(UUID id) {
-        return genreDAO.findById(id);
+        return genreRepository.getById(id);
     }
 
-    public Genre saveGenre(GenreDto genreDto) {
-        return genreDAO.insert(genreDto.toEntity());
+    public Genre saveGenre(GenreDto dto) {
+        return genreRepository.save(genreDtoService.dtoToEntity(dto));
     }
 
-    public Genre updateGenre(UUID id, GenreDto newGenre) {
-        return genreDAO.update(id, newGenre.toEntity(id));
+    public Genre updateGenre(UUID id, GenreDto dto) {
+        return genreRepository.update(genreDtoService.dtoToEntity(id, dto));
     }
 
     public void deleteGenre(UUID id) {
-        genreDAO.deleteById(id);
+        genreRepository.deleteById(id);
     }
 }

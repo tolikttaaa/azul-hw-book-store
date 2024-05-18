@@ -2,8 +2,8 @@ package org.ttaaa.backendhw.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.ttaaa.backendhw.models.dto.GenreDto;
-import org.ttaaa.backendhw.models.entity.Genre;
+import org.ttaaa.backendhw.model.dto.GenreDto;
+import org.ttaaa.backendhw.model.entity.Genre;
 import org.ttaaa.backendhw.service.GenreService;
 
 import java.util.List;

@@ -1,25 +1,30 @@
 package org.ttaaa.backendhw.exception;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.ttaaa.backendhw.models.dto.AuthorDto;
-import org.ttaaa.backendhw.models.dto.GenreDto;
+import org.ttaaa.backendhw.model.entity.Author;
+import org.ttaaa.backendhw.model.entity.Genre;
 
+@Getter
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class BadRequestException extends RuntimeException {
-    public BadRequestException(String message) {
+    private final Object data;
+
+    public BadRequestException(String message, Object data) {
         super(message);
+        this.data = data;
     }
 
     public static class GenreBadRequestException extends BadRequestException {
-        public GenreBadRequestException(GenreDto genre) {
-            super("Failed to create genre: " + genre.toString());
+        public GenreBadRequestException(String message, Genre entity) {
+            super(message, entity);
         }
     }
 
     public static class AuthorBadRequestException extends BadRequestException {
-        public AuthorBadRequestException(AuthorDto author) {
-            super("Failed to create author: " + author.toString());
+        public AuthorBadRequestException(String message, Author entity) {
+            super(message, entity);
         }
     }
 }

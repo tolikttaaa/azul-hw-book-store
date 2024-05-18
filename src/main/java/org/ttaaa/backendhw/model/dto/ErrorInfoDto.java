@@ -1,4 +1,4 @@
-package org.ttaaa.backendhw.models.dto;
+package org.ttaaa.backendhw.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class ErrorInfoDto {
     private final int status;
     private final String message;
+    private final Object data;
     private String stackTrace;
     private List<ValidationError> errors;
 

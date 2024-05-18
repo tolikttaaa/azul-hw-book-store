@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.ttaaa.backendhw.models.dto.ErrorInfoDto;
+import org.ttaaa.backendhw.model.dto.ErrorInfoDto;
 
 import java.util.Objects;
 
@@ -27,13 +27,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     protected ResponseEntity<Object> handleNotFoundException(NotFoundException exception, WebRequest request) {
-        log.warn("Failed to find the requested element", exception);
         return buildErrorResponse(exception, HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(BadRequestException.class)
     protected ResponseEntity<Object> handleBadRequestException(BadRequestException exception, WebRequest request) {
-        log.warn("Failed to process the request", exception);
         return buildErrorResponse(exception, HttpStatus.BAD_REQUEST, request);
     }
 
@@ -47,6 +45,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildErrorResponse(
                 exception,
                 "Unknown error occurred",
+                null,
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 request
         );
@@ -68,7 +67,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatusCode httpStatusCode,
             WebRequest request
     ) {
-        return buildErrorResponse(exception, exception.getMessage(), httpStatusCode, request);
+        return buildErrorResponse(exception, exception.getMessage(), exception.getData(), httpStatusCode, request);
     }
 
     private ResponseEntity<Object> buildErrorResponse(
@@ -76,16 +75,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatusCode httpStatusCode,
             WebRequest request
     ) {
-        return buildErrorResponse(exception, exception.getMessage(), httpStatusCode, request);
+        return buildErrorResponse(exception, exception.getMessage(), null, httpStatusCode, request);
     }
 
     private ResponseEntity<Object> buildErrorResponse(
             Exception exception,
             String message,
+            Object data,
             HttpStatusCode httpStatusCode,
             WebRequest request
     ) {
-        ErrorInfoDto errorDto = new ErrorInfoDto(httpStatusCode.value(), message);
+        ErrorInfoDto errorDto = new ErrorInfoDto(httpStatusCode.value(), message, data);
 
         if (isTraceOn(request) && printStackTrace) errorDto.setStackTrace(ExceptionUtils.getStackTrace(exception));
 

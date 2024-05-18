@@ -1,20 +1,14 @@
-package org.ttaaa.backendhw.models.entity;
+package org.ttaaa.backendhw.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Author {
-    private UUID id;
-
+public class AuthorDto {
     private String firstName;
-
     private String lastName;
-
     private String midName;
 }

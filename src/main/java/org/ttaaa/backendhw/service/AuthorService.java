@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.ttaaa.backendhw.exception.NotFoundException;
-import org.ttaaa.backendhw.models.dto.AuthorDto;
-import org.ttaaa.backendhw.models.entity.Author;
-import org.ttaaa.backendhw.dao.AuthorDAO;
+import org.ttaaa.backendhw.model.dto.AuthorDto;
+import org.ttaaa.backendhw.model.entity.Author;
+import org.ttaaa.backendhw.repository.AuthorRepository;
+import org.ttaaa.backendhw.service.dto.AuthorDtoService;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,25 +16,26 @@ import java.util.UUID;
 @Transactional
 @AllArgsConstructor
 public class AuthorService {
-    private AuthorDAO authorDAO;
+    private AuthorRepository authorRepository;
+    private AuthorDtoService authorDtoService;
 
     public List<Author> getAllAuthors() {
-        return authorDAO.findAll();
+        return authorRepository.getAll();
     }
 
     public Author getAuthor(UUID id) {
-        return authorDAO.findById(id);
+        return authorRepository.getById(id);
     }
 
-    public Author saveAuthor(AuthorDto authorDto) {
-        return authorDAO.insert(authorDto.toEntity());
+    public Author saveAuthor(AuthorDto dto) {
+        return authorRepository.save(authorDtoService.dtoToEntity(dto));
     }
 
-    public Author updateAuthor(UUID id, AuthorDto newAuthor) {
-        return authorDAO.update(id, newAuthor.toEntity(id));
+    public Author updateAuthor(UUID id, AuthorDto dto) {
+        return authorRepository.update(authorDtoService.dtoToEntity(id, dto));
     }
 
     public void deleteAuthor(UUID id) {
-        authorDAO.deleteById(id);
+        authorRepository.deleteById(id);
     }
 }
