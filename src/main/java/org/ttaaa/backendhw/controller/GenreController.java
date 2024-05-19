@@ -1,5 +1,6 @@
 package org.ttaaa.backendhw.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.ttaaa.backendhw.model.dto.GenreDto;
@@ -21,8 +22,8 @@ public class GenreController {
     }
 
     @PostMapping("/")
-    public Genre newGenre(@RequestBody GenreDto newGenre) {
-        return genreService.saveGenre(newGenre);
+    public Genre newGenre(@RequestBody @Valid GenreDto dto) {
+        return genreService.saveGenre(dto);
     }
 
     @GetMapping("/{id}")
@@ -31,8 +32,8 @@ public class GenreController {
     }
 
     @PutMapping("/{id}")
-    public Genre updateGenre(@RequestBody GenreDto newGenre, @PathVariable UUID id) {
-        return genreService.updateGenre(id, newGenre);
+    public Genre updateGenre(@RequestBody @Valid GenreDto dto, @PathVariable UUID id) {
+        return genreService.updateGenre(id, dto);
     }
 
     @DeleteMapping("/{id}")

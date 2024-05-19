@@ -1,7 +1,7 @@
 package org.ttaaa.backendhw.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.ttaaa.backendhw.model.dto.BookDto;
 import org.ttaaa.backendhw.model.entity.Book;
@@ -22,8 +22,8 @@ public class BookController {
     }
 
     @PostMapping("/")
-    public Book newBook(@RequestBody BookDto newBook) {
-        return bookService.saveBook(newBook);
+    public Book newBook(@RequestBody @Valid BookDto dto) {
+        return bookService.saveBook(dto);
     }
 
     @GetMapping("/{id}")
@@ -32,8 +32,8 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public Book updateAuthor(@RequestBody BookDto newBook, @PathVariable UUID id) {
-        return bookService.updateBook(id, newBook);
+    public Book updateAuthor(@RequestBody @Valid BookDto dto, @PathVariable UUID id) {
+        return bookService.updateBook(id, dto);
     }
 
     @DeleteMapping("/{id}")

@@ -7,6 +7,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -33,6 +36,30 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     protected ResponseEntity<Object> handleBadRequestException(BadRequestException exception, WebRequest request) {
         return buildErrorResponse(exception, HttpStatus.BAD_REQUEST, request);
+    }
+
+
+    @Override
+    @Nullable
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            HttpHeaders ignoredHeaders,
+            HttpStatusCode status,
+            WebRequest ignoredRequest
+    ) {
+        ErrorInfoDto errorInfo = new ErrorInfoDto(
+                status.value(),
+                "Validation error. Check 'errors' field for details.",
+                null
+        );
+
+        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+            errorInfo.addValidationError(fieldError.getField(),
+                    fieldError.getDefaultMessage());
+        }
+
+        return ResponseEntity.unprocessableEntity().body(errorInfo);
     }
 
     @ExceptionHandler(RuntimeException.class)
