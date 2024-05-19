@@ -23,4 +23,36 @@ public class BookDto {
     private UUID authorId;
 
     private Set<UUID> genreIds;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TitleDto {
+        @NotEmpty
+        @Size(max = 256)
+        private String title;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PriceDto {
+        @Positive
+        private Double price = null;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AuthorIdDto {
+        @NotNull
+        private UUID authorId;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GenreIdsDto {
+        private Set<UUID> genreIds;
+    }
 }

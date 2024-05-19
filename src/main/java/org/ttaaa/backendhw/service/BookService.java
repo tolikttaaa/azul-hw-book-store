@@ -27,15 +27,31 @@ public class BookService {
         return bookRepository.getById(id);
     }
 
-    public Book saveBook(BookDto bookDto) {
-        return bookRepository.save(bookDtoService.dtoToEntity(bookDto));
+    public Book saveBook(BookDto dto) {
+        return bookRepository.save(bookDtoService.dtoToEntity(dto));
     }
 
-    public Book updateBook(UUID id, BookDto bookDto) {
-        return bookRepository.update(bookDtoService.dtoToEntity(id, bookDto));
+    public Book updateBook(UUID id, BookDto dto) {
+        return bookRepository.update(bookDtoService.dtoToEntity(id, dto));
     }
 
     public void deleteBook(UUID id) {
         bookRepository.deleteById(id);
+    }
+
+    public Book updateBookTitle(UUID id, BookDto.TitleDto dto) {
+        return bookRepository.updateBookTitle(id, dto.getTitle());
+    }
+
+    public Book updateBookPrice(UUID id, BookDto.PriceDto dto) {
+        return bookRepository.updateBookPrice(id, dto.getPrice());
+    }
+
+    public Book updateBookAuthor(UUID id, BookDto.AuthorIdDto dto) {
+        return bookRepository.updateBookAuthor(id, bookDtoService.authorIdDtoToEntity(dto));
+    }
+
+    public Book updateBookGenres(UUID id, BookDto.GenreIdsDto dto) {
+        return bookRepository.updateBookGenres(id, bookDtoService.genreIdsDtoToEntity(dto));
     }
 }

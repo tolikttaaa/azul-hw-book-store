@@ -14,10 +14,6 @@ import java.util.UUID;
 
 @Repository
 public class AuthorRepositoryImpl extends AbstractRepository implements AuthorRepository {
-    private final String PQL_GET_ALL = "SELECT a FROM Author a";
-    private final String PQL_GET_BY_UNIQUE_PARAMS =
-            "SELECT a FROM Author a WHERE a.firstName = :firstName AND a.lastName = :lastName AND a.midName = :midName";
-
     @Override
     @Transactional
     public Author save(Author entity) {
@@ -47,7 +43,7 @@ public class AuthorRepositoryImpl extends AbstractRepository implements AuthorRe
     }
 
     private Optional<Author> getByUniqueParams(Author filter) {
-        return entityManager.createQuery(PQL_GET_BY_UNIQUE_PARAMS, Author.class)
+        return entityManager.createQuery("SELECT a FROM Author a WHERE a.firstName = :firstName AND a.lastName = :lastName AND a.midName = :midName", Author.class)
                 .setParameter("firstName", filter.getFirstName())
                 .setParameter("lastName", filter.getLastName())
                 .setParameter("midName", filter.getMidName())
@@ -56,7 +52,7 @@ public class AuthorRepositoryImpl extends AbstractRepository implements AuthorRe
 
     @Override
     public List<Author> getAll() {
-        return entityManager.createQuery(PQL_GET_ALL, Author.class).getResultList();
+        return entityManager.createQuery("SELECT a FROM Author a", Author.class).getResultList();
     }
 
     @Override

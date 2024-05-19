@@ -16,11 +16,6 @@ import org.ttaaa.backendhw.model.entity.Genre;
 
 @Repository
 public class GenreRepositoryImpl extends AbstractRepository implements GenreRepository {
-    private final String PQL_GET_ALL = "SELECT g FROM Genre g";
-    private final String PQL_GET_BY_UNIQUE_PARAMS =
-            "SELECT g FROM Genre g WHERE g.name = :name";
-    private final String PQL_GET_BY_IDS = "SELECT g FROM Genre g WHERE g.id IN :ids";
-
     @Override
     @Transactional
     public Genre save(Genre entity) {
@@ -51,20 +46,20 @@ public class GenreRepositoryImpl extends AbstractRepository implements GenreRepo
 
     @Override
     public Set<Genre> getByIds(List<UUID> uuids) {
-        return entityManager.createQuery(PQL_GET_BY_IDS, Genre.class)
+        return entityManager.createQuery("SELECT g FROM Genre g WHERE g.id IN :ids", Genre.class)
                 .setParameter("ids", uuids)
                 .getResultStream().collect(Collectors.toSet());
     }
 
     private Optional<Genre> getByUniqueParams(Genre filter) {
-        return entityManager.createQuery(PQL_GET_BY_UNIQUE_PARAMS, Genre.class)
+        return entityManager.createQuery("SELECT g FROM Genre g WHERE g.name = :name", Genre.class)
                 .setParameter("name", filter.getName())
                 .getResultStream().findFirst();
     }
 
     @Override
     public List<Genre> getAll() {
-        return entityManager.createQuery(PQL_GET_ALL, Genre.class).getResultList();
+        return entityManager.createQuery("SELECT g FROM Genre g", Genre.class).getResultList();
     }
 
     @Override

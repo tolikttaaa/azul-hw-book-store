@@ -32,8 +32,28 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public Book updateAuthor(@RequestBody @Valid BookDto dto, @PathVariable UUID id) {
+    public Book updateBook(@RequestBody @Valid BookDto dto, @PathVariable UUID id) {
         return bookService.updateBook(id, dto);
+    }
+
+    @PutMapping("/{id}/title")
+    public Book updateTitle(@RequestBody @Valid BookDto.TitleDto dto, @PathVariable UUID id) {
+        return bookService.updateBookTitle(id, dto);
+    }
+
+    @PutMapping("/{id}/price")
+    public Book updatePrice(@RequestBody @Valid BookDto.PriceDto dto, @PathVariable UUID id) {
+        return bookService.updateBookPrice(id, dto);
+    }
+
+    @PutMapping("/{id}/author")
+    public Book updateAuthor(@RequestBody @Valid BookDto.AuthorIdDto dto, @PathVariable UUID id) {
+        return bookService.updateBookAuthor(id, dto);
+    }
+
+    @PutMapping("/{id}/genres/")
+    public Book updateGenres(@RequestBody @Valid BookDto.GenreIdsDto dto, @PathVariable UUID id) {
+        return bookService.updateBookGenres(id, dto);
     }
 
     @DeleteMapping("/{id}")

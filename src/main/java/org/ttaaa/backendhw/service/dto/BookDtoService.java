@@ -19,14 +19,22 @@ public class BookDtoService implements DtoService<BookDto, Book, UUID> {
     private final GenreRepository genreRepository;
 
     @Override
-    public Book dtoToEntity(BookDto bookDto) {
-        return dtoToEntity(UUID.randomUUID(), bookDto);
+    public Book dtoToEntity(BookDto dto) {
+        return dtoToEntity(UUID.randomUUID(), dto);
     }
 
     @Override
-    public Book dtoToEntity(UUID id, BookDto bookDto) {
-        Author author = authorRepository.getById(bookDto.getAuthorId());
-        Set<Genre> genres = genreRepository.getByIds(bookDto.getGenreIds().stream().toList());
-        return new Book(id, bookDto.getTitle(), bookDto.getPrice(), author, genres);
+    public Book dtoToEntity(UUID id, BookDto dto) {
+        Author author = authorRepository.getById(dto.getAuthorId());
+        Set<Genre> genres = genreRepository.getByIds(dto.getGenreIds().stream().toList());
+        return new Book(id, dto.getTitle(), dto.getPrice(), author, genres);
+    }
+
+    public Author authorIdDtoToEntity(BookDto.AuthorIdDto dto) {
+        return authorRepository.getById(dto.getAuthorId());
+    }
+
+    public Set<Genre> genreIdsDtoToEntity(BookDto.GenreIdsDto dto) {
+        return genreRepository.getByIds(dto.getGenreIds().stream().toList());
     }
 }
