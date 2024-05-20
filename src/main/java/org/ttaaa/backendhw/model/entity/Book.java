@@ -27,7 +27,7 @@ public class Book {
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "book_to_genre",
             joinColumns = @JoinColumn(name = "book_id"),

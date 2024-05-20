@@ -1,5 +1,6 @@
 package org.ttaaa.backendhw.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -38,9 +38,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildErrorResponse(exception, HttpStatus.BAD_REQUEST, request);
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<Object> handleBadRequestException(ConstraintViolationException exception, WebRequest request) {
+        return buildErrorResponse(exception, HttpStatus.BAD_REQUEST, request);
+    }
 
     @Override
-    @Nullable
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,

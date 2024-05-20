@@ -4,13 +4,15 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.ttaaa.backendhw.model.dto.BookDto;
+import org.ttaaa.backendhw.model.dto.BookSearchDto;
+import org.ttaaa.backendhw.model.dto.PaginationResponseDto;
 import org.ttaaa.backendhw.repository.BookRepository;
 import org.ttaaa.backendhw.model.entity.Book;
 import org.ttaaa.backendhw.service.dto.BookDtoService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-
 
 @Service
 @Transactional
@@ -53,5 +55,22 @@ public class BookService {
 
     public Book updateBookGenres(UUID id, BookDto.GenreIdsDto dto) {
         return bookRepository.updateBookGenres(id, bookDtoService.genreIdsDtoToEntity(dto));
+    }
+
+    public PaginationResponseDto<Book> getBookByFilter(BookSearchDto dto, int pageNumber, int pageSize) {
+        List<Book> content = bookRepository.getByFilter(
+                Optional.ofNullable(dto.getTitle()),
+                Optional.ofNullable(dto.getGenreName()),
+                Optional.ofNullable(dto.getAuthorFirstName()),
+                Optional.ofNullable(dto.getAuthorLastName()),
+                Optional.ofNullable(dto.getAuthorMidName()),
+                pageNumber * pageSize, pageSize + 1
+        );
+
+        return new PaginationResponseDto<>(
+                pageNumber, pageSize,
+                content.size() > pageSize,
+                content.stream().limit(pageSize).toList()
+        );
     }
 }

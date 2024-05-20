@@ -17,7 +17,7 @@ public class AuthorRepositoryImpl extends AbstractRepository implements AuthorRe
     @Override
     @Transactional
     public Author save(Author entity) {
-        Optional<Author> existing = getByUniqueParams(entity);
+        Optional<Author> existing = getByUniqueParams(entity.getFirstName(), entity.getLastName(), entity.getMidName());
         if (existing.isPresent()) throw new BadRequestException.AuthorBadRequestException("Author already exists", existing.get());
 
         entityManager.persist(entity);
@@ -28,8 +28,8 @@ public class AuthorRepositoryImpl extends AbstractRepository implements AuthorRe
     @Transactional
     public Author update(Author entity) {
         getById(entity.getId());
-        Optional<Author> existing = getByUniqueParams(entity);
-        if (existing.isPresent()) throw new BadRequestException.AuthorBadRequestException("Author already exists", existing.get());
+        Optional<Author> existing = getByUniqueParams(entity.getFirstName(), entity.getLastName(), entity.getMidName());
+        if (existing.isPresent()) throw new BadRequestException.AuthorBadRequestException("Author with such params already exists", existing.get());
 
         entityManager.merge(entity);
         return entity;
@@ -42,11 +42,11 @@ public class AuthorRepositoryImpl extends AbstractRepository implements AuthorRe
         return entity;
     }
 
-    private Optional<Author> getByUniqueParams(Author filter) {
+    private Optional<Author> getByUniqueParams(String firstName, String lastName, String midName) {
         return entityManager.createQuery("SELECT a FROM Author a WHERE a.firstName = :firstName AND a.lastName = :lastName AND a.midName = :midName", Author.class)
-                .setParameter("firstName", filter.getFirstName())
-                .setParameter("lastName", filter.getLastName())
-                .setParameter("midName", filter.getMidName())
+                .setParameter("firstName", firstName)
+                .setParameter("lastName", lastName)
+                .setParameter("midName", midName)
                 .getResultStream().findFirst();
     }
 

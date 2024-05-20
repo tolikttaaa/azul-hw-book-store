@@ -19,7 +19,7 @@ public class GenreRepositoryImpl extends AbstractRepository implements GenreRepo
     @Override
     @Transactional
     public Genre save(Genre entity) {
-        Optional<Genre> existing = getByUniqueParams(entity);
+        Optional<Genre> existing = getByUniqueParams(entity.getName());
         if (existing.isPresent()) throw new BadRequestException.GenreBadRequestException("Genre already exists", existing.get());
 
         entityManager.persist(entity);
@@ -30,8 +30,8 @@ public class GenreRepositoryImpl extends AbstractRepository implements GenreRepo
     @Transactional
     public Genre update(Genre entity) {
         getById(entity.getId());
-        Optional<Genre> existing = getByUniqueParams(entity);
-        if (existing.isPresent()) throw new BadRequestException.GenreBadRequestException("Genre already exists", existing.get());
+        Optional<Genre> existing = getByUniqueParams(entity.getName());
+        if (existing.isPresent()) throw new BadRequestException.GenreBadRequestException("Genre with such params already exists", existing.get());
 
         entityManager.merge(entity);
         return entity;
@@ -51,9 +51,9 @@ public class GenreRepositoryImpl extends AbstractRepository implements GenreRepo
                 .getResultStream().collect(Collectors.toSet());
     }
 
-    private Optional<Genre> getByUniqueParams(Genre filter) {
+    private Optional<Genre> getByUniqueParams(String name) {
         return entityManager.createQuery("SELECT g FROM Genre g WHERE g.name = :name", Genre.class)
-                .setParameter("name", filter.getName())
+                .setParameter("name", name)
                 .getResultStream().findFirst();
     }
 

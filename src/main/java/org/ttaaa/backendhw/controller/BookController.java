@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/data/book")
+@RequestMapping("/book/data")
 @AllArgsConstructor
 public class BookController {
     private BookService bookService;

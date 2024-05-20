@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/changes/changeset_initial_v0.0.1.sql
   - include:
       file: db/changelog/changes/changeset_indexes_v0.0.2.sql
+  - include:
+      file: db/changelog/changes/changeset_unique_fix_v0.0.3.sql
