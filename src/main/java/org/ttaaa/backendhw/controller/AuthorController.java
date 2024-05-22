@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/author/data")
+@RequestMapping("/data/author")
 @AllArgsConstructor
 public class AuthorController {
     private AuthorService authorService;
@@ -21,7 +21,7 @@ public class AuthorController {
         return authorService.getAllAuthors();
     }
 
-    @PostMapping("/")
+    @PostMapping("/new")
     public Author newAuthor(@RequestBody @Valid AuthorDto dto) {
         return authorService.saveAuthor(dto);
     }

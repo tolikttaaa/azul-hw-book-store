@@ -4,10 +4,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -115,6 +112,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatusCode httpStatusCode,
             WebRequest request
     ) {
+        log.error(message, exception);
         ErrorInfoDto errorDto = new ErrorInfoDto(httpStatusCode.value(), message, data);
 
         if (isTraceOn(request) && printStackTrace) errorDto.setStackTrace(ExceptionUtils.getStackTrace(exception));

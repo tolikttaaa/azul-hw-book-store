@@ -34,4 +34,10 @@ public class BadRequestException extends RuntimeException {
             super(message, entity);
         }
     }
+
+    public static class UserBadRequestException extends BadRequestException {
+        public UserBadRequestException(String message, Object object) {
+            super(message, object);
+        }
+    }
 }

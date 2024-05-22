@@ -2,6 +2,7 @@ package org.ttaaa.backendhw.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.ttaaa.backendhw.model.dto.BookDto;
 import org.ttaaa.backendhw.model.entity.Book;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/book/data")
+@RequestMapping("/data/book")
 @AllArgsConstructor
 public class BookController {
     private BookService bookService;
@@ -21,7 +22,7 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
-    @PostMapping("/")
+    @PostMapping("/new")
     public Book newBook(@RequestBody @Valid BookDto dto) {
         return bookService.saveBook(dto);
     }

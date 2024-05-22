@@ -2,6 +2,7 @@ package org.ttaaa.backendhw.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.ttaaa.backendhw.model.dto.GenreDto;
 import org.ttaaa.backendhw.model.entity.Genre;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/genre/data")
+@RequestMapping("/data/genre")
 @AllArgsConstructor
 public class GenreController {
     private GenreService genreService;
@@ -21,7 +22,7 @@ public class GenreController {
         return genreService.getAllGenres();
     }
 
-    @PostMapping("/")
+    @PostMapping("/new")
     public Genre newGenre(@RequestBody @Valid GenreDto dto) {
         return genreService.saveGenre(dto);
     }

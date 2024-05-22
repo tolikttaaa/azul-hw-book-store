@@ -6,8 +6,8 @@ import org.ttaaa.backendhw.model.dto.BookDto;
 import org.ttaaa.backendhw.model.entity.Author;
 import org.ttaaa.backendhw.model.entity.Book;
 import org.ttaaa.backendhw.model.entity.Genre;
-import org.ttaaa.backendhw.repository.AuthorRepository;
-import org.ttaaa.backendhw.repository.GenreRepository;
+import org.ttaaa.backendhw.service.AuthorService;
+import org.ttaaa.backendhw.service.GenreService;
 
 import java.util.Set;
 import java.util.UUID;
@@ -15,8 +15,8 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class BookDtoService implements DtoService<BookDto, Book, UUID> {
-    private final AuthorRepository authorRepository;
-    private final GenreRepository genreRepository;
+    private final AuthorService authorService;
+    private final GenreService genreService;
 
     @Override
     public Book dtoToEntity(BookDto dto) {
@@ -25,16 +25,8 @@ public class BookDtoService implements DtoService<BookDto, Book, UUID> {
 
     @Override
     public Book dtoToEntity(UUID id, BookDto dto) {
-        Author author = authorRepository.getById(dto.getAuthorId());
-        Set<Genre> genres = genreRepository.getByIds(dto.getGenreIds().stream().toList());
+        Author author = authorService.getAuthor(dto.getAuthorId());
+        Set<Genre> genres = genreService.getGenresByIds(dto.getGenreIds().stream().toList());
         return new Book(id, dto.getTitle(), dto.getPrice(), author, genres);
-    }
-
-    public Author authorIdDtoToEntity(BookDto.AuthorIdDto dto) {
-        return authorRepository.getById(dto.getAuthorId());
-    }
-
-    public Set<Genre> genreIdsDtoToEntity(BookDto.GenreIdsDto dto) {
-        return genreRepository.getByIds(dto.getGenreIds().stream().toList());
     }
 }
