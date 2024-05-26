@@ -52,7 +52,7 @@ public class BookController {
         return bookService.updateBookAuthor(id, dto);
     }
 
-    @PutMapping("/{id}/genres/")
+    @PutMapping("/{id}/genres")
     public Book updateGenres(@RequestBody @Valid BookDto.GenreIdsDto dto, @PathVariable UUID id) {
         return bookService.updateBookGenres(id, dto);
     }

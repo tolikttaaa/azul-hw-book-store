@@ -23,9 +23,10 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PutMapping("/{username}")
+    @PutMapping("/role/{username}")
     public User updateUserRole(
-            @RequestBody @Valid UserRole role, @PathVariable @NotEmpty String username) {
+            @PathVariable @NotEmpty String username,
+            @RequestBody @Valid UserRole role) {
         if (role.equals(UserRole.SYSTEM))
             throw new BadRequestException.UserBadRequestException(
                     "UserRole.SYSTEM can not be set up for usual user", role);
