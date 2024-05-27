@@ -10,17 +10,28 @@ import org.ttaaa.backendhw.service.UserService;
 
 @Component
 public class SystemUserInitialization {
-    @Value("${system.username}")
+    @Value("${system.username:user}")
     private String systemUsername;
 
-    @Value("${system.password}")
+    @Value("${system.password:password}")
     private String systemPassword;
+
+    @Value("${system.user.init.enabled:false}")
+    private Boolean initEnabled;
+
+    public Boolean isInitEnabled() {
+        return initEnabled;
+    }
 
     @Autowired
     private UserService userService;
 
-    @EventListener
+    @EventListener(
+            value = ApplicationReadyEvent.class,
+            condition = "@systemUserInitialization.isInitEnabled()"
+    )
     public void appReady(ApplicationReadyEvent ignoredEvent) {
-        userService.createUserIfNotExist(systemUsername, systemPassword, UserRole.SYSTEM);
+        userService.createUserWithRoleIfNotExist(systemUsername, systemPassword, UserRole.SYSTEM);
     }
+
 }

@@ -6,7 +6,7 @@ To launch the application you need to complete the following list of steps:
 3. Launch application
 
 ## Setup PostgreSQL database
-You will need to setup `PostgreSQL` database with to run the app. 
+You will need to set up `PostgreSQL` database with to run the app. 
 One of the possible way is to do it by `Docker`
 
 ## Setup environment variables
@@ -39,6 +39,10 @@ One of the possible way is to do it by `Docker`
 
    Expiration time to JWT tokens in millis
 
+- `SYSTEM_USER_ENABLED`, default value - `true`
+
+   Flag to init system user
+
 - `SYSTEM_USERNAME`, default value - `system`
 
    Username for system user with SYSTEM role
@@ -49,11 +53,11 @@ One of the possible way is to do it by `Docker`
 
 - `SHOW_SQL_LOG`, default value - `false`
 
-  flag to log SQL request to database. Can be used in case of testing
+   Flag to log SQL request to database. Can be used in case of testing
 
 - `RESPONSE_TRACE`, default value - `false`
 
-   flag to insert stack trace into the error response. Can be used in case of testing 
+   Flag to insert stack trace into the error response. Can be used in case of testing 
 
 
 ## Launch application 

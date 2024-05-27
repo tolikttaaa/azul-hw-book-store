@@ -15,10 +15,10 @@ import java.util.function.Function;
 @Service
 public class JwtService {
     @Value("${security.jwt.secret-key:secretKey}")
-    private String JWT_SECRET_KEY;
+    private String jwtSecretKey;
 
     @Value("${security.jwt.expiration-time:3600000}")
-    private long EXPIRATION_TIME;
+    private long expirationTime;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -34,7 +34,7 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, EXPIRATION_TIME);
+        return buildToken(extraClaims, userDetails, expirationTime);
     }
 
     private String buildToken(
@@ -48,7 +48,7 @@ public class JwtService {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS256, JWT_SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, jwtSecretKey)
                 .compact();
     }
 
@@ -68,7 +68,7 @@ public class JwtService {
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
-                .setSigningKey(JWT_SECRET_KEY)
+                .setSigningKey(jwtSecretKey)
                 .parseClaimsJws(token)
                 .getBody();
     }

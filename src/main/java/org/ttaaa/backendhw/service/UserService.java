@@ -18,18 +18,18 @@ import java.util.UUID;
 @Transactional
 @AllArgsConstructor
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User createUser(String username, String password, UserRole userRole) {
-        Optional<User> user = userRepository.findByUsername(username);
+    public User createUser(String username, String password) {
+        Optional<User> user = getUserByUsername(username);
         if (user.isPresent()) throw new BadRequestException.UserBadRequestException("User already exists", username);
 
-        return userRepository.save(new User(UUID.randomUUID(), username, passwordEncoder.encode(password), userRole));
+        return userRepository.save(new User(UUID.randomUUID(), username, passwordEncoder.encode(password), UserRole.USER));
     }
 
-    public void createUserIfNotExist(String username, String password, UserRole userRole) {
-        Optional<User> user = userRepository.findByUsername(username);
+    public void createUserWithRoleIfNotExist(String username, String password, UserRole userRole) {
+        Optional<User> user = getUserByUsername(username);
         if (user.isEmpty()) userRepository.save(new User(UUID.randomUUID(), username, passwordEncoder.encode(password), userRole));
     }
 
@@ -38,6 +38,9 @@ public class UserService {
     }
 
     public User updateUserRole(String username, UserRole role) {
+        if (role == UserRole.SYSTEM)
+            throw new BadRequestException.UserBadRequestException("UserRole.SYSTEM can not be set up", role);
+
         Optional<User> user = getUserByUsername(username);
         if (user.isEmpty()) throw new UsernameNotFoundException("User not found");
         userRepository.updateRoleByUsername(username, role);

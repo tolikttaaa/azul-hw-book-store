@@ -1,16 +1,22 @@
 package org.ttaaa.backendhw.repository.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.ttaaa.backendhw.model.entity.Book;
-import org.ttaaa.backendhw.repository.AbstractRepository;
 import org.ttaaa.backendhw.repository.BookFilterRepository;
 
 import java.util.*;
 import java.util.stream.Stream;
 
 @Repository
-public class BookFilterRepositoryImpl extends AbstractRepository implements BookFilterRepository {
+@AllArgsConstructor
+public class BookFilterRepositoryImpl implements BookFilterRepository {
+    @PersistenceContext
+    protected EntityManager entityManager;
+
     @Override
     public List<Book> getByFilter(
             Optional<String> title,

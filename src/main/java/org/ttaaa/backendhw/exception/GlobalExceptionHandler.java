@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,7 +16,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import org.ttaaa.backendhw.model.dto.ErrorInfoDto;
 
 import java.util.Objects;
-
 
 @Slf4j
 @ControllerAdvice
@@ -38,6 +38,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<Object> handleBadRequestException(ConstraintViolationException exception, WebRequest request) {
         return buildErrorResponse(exception, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    protected ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException exception, WebRequest request) {
+        return buildErrorResponse(exception, "Invalid username or password", null, HttpStatus.UNAUTHORIZED, request);
     }
 
     @Override

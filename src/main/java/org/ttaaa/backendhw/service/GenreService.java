@@ -45,7 +45,8 @@ public class GenreService {
         getGenre(id);
 
         Optional<Genre> existing = genreRepository.findByName(dto.getName());
-        if (existing.isPresent()) throw new BadRequestException.GenreBadRequestException("Genre with such params already exists", existing.get());
+        if (existing.isPresent() && existing.get().getId() != id)
+            throw new BadRequestException.GenreBadRequestException("Genre with such params already exists", existing.get());
 
         return genreRepository.save(genreDtoService.dtoToEntity(id, dto));
     }

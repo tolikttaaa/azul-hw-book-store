@@ -19,8 +19,8 @@ import java.util.UUID;
 @Transactional
 @AllArgsConstructor
 public class AuthorService {
-    private AuthorRepository authorRepository;
-    private AuthorDtoService authorDtoService;
+    private final AuthorRepository authorRepository;
+    private final AuthorDtoService authorDtoService;
 
     public List<Author> getAllAuthors() {
         return authorRepository.findAll();
@@ -43,7 +43,8 @@ public class AuthorService {
         getAuthor(id);
 
         Optional<Author> existing = authorRepository.getByUniqueParams(dto.getFirstName(), dto.getLastName(), dto.getMidName());
-        if (existing.isPresent()) throw new BadRequestException.AuthorBadRequestException("Author with such params already exists", existing.get());
+        if (existing.isPresent() && existing.get().getId() != id)
+            throw new BadRequestException.AuthorBadRequestException("Author with such params already exists", existing.get());
 
         return authorRepository.save(authorDtoService.dtoToEntity(id, dto));
     }

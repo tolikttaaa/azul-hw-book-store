@@ -48,7 +48,8 @@ public class BookService {
         getBook(id);
 
         Optional<Book> existing = checkBookExistence(dto.getTitle(), dto.getAuthorId());
-        if (existing.isPresent()) throw new BadRequestException.BookBadRequestException("Book with such params already exists", existing.get());
+        if (existing.isPresent() && existing.get().getId() != id)
+            throw new BadRequestException.BookBadRequestException("Book with such params already exists", existing.get());
 
         return bookRepository.save(bookDtoService.dtoToEntity(id, dto));
     }
@@ -65,7 +66,8 @@ public class BookService {
         Book entity = getBook(id);
 
         Optional<Book> existing = checkBookExistence(dto.getTitle(), entity.getAuthor().getId());
-        if (existing.isPresent()) throw new BadRequestException.BookBadRequestException("Book with such params already exists", existing.get());
+        if (existing.isPresent() && existing.get().getId() != id)
+            throw new BadRequestException.BookBadRequestException("Book with such params already exists", existing.get());
 
         entity.setTitle(dto.getTitle());
         return bookRepository.save(entity);
@@ -81,7 +83,8 @@ public class BookService {
         Book entity = getBook(id);
 
         Optional<Book> existing = checkBookExistence(entity.getTitle(), dto.getAuthorId());
-        if (existing.isPresent()) throw new BadRequestException.BookBadRequestException("Book with such params already exists", existing.get());
+        if (existing.isPresent() && existing.get().getId() != id)
+            throw new BadRequestException.BookBadRequestException("Book with such params already exists", existing.get());
 
         entity.setAuthor(authorService.getAuthor(dto.getAuthorId()));
         return bookRepository.save(entity);
